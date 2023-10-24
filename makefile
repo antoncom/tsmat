@@ -19,7 +19,7 @@ USR_INC_DIR = -I$(COMMON_USR_DIR)/include
 STD_LIB_FILES =	-ldl -lpthread -lm -lrilutil -llog -lprop2uci -luci -lubox -lubus -lblobmsg_json -ljson_script -ljson-c
 USR_LIB_FILES = -lnwy_service -lnwy_common
 LDFLAGS += -L$(COMMON_USR_DIR)/lib
-LDFLAGS += -L./libs
+LDFLAGS += -L$(PWD)/libs
 
 #--------------------------------------------------------------
 # Source code files
