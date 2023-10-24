@@ -1,0 +1,1 @@
+Here store lib binary file which create by libsrc.
