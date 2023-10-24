@@ -9,7 +9,7 @@ APP_NAME = tsmat
 #--------------------------------------------------------------
 # Include definition
 #--------------------------------------------------------------
-#COMMON_USR_DIR=../../tool/toolchain-arm_cortex-a7+neon-vfpv4_gcc-4.8-linaro_uClibc-1.0.25_eabi/linux64/usr
+COMMON_USR_DIR=/home/anton/work/N725/ext_toolchain/N725_OPEN_WRT_SDK_V2.35/tool/neoway-arm-oe-linux/sysroots/usr
 INC_DIR=  -I ./include
 USR_INC_DIR = -I$(COMMON_USR_DIR)/include
 
