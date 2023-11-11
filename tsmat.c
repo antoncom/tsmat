@@ -54,13 +54,13 @@ int nwy_at_urc_table_size = sizeof(at_cmd_urc_table)/sizeof(at_cmd_urc_table[0])
 
 int handle_onUnsolicited(char *cmd, const char *urc_info, int urc_len)
 {
-    /*
+    
     printf("\n=====================================\n");
     printf("cmd: %s\n", cmd);
     printf("info: %s\n", urc_info);
     printf("length: %d\n", urc_len);
     printf("=====================================\n");
-    */
+    
 
     // printf("oldbuf_len: %d\n", oldbuf_len);
     // printf("clearbuf: %s\n", clearbuf);
@@ -106,7 +106,7 @@ int main()
         return 1;
     }
 //Открываем fifo для чтения и записи
-    if((fd1=open("/tmp/tsmat.pipein", O_RDWR)) == - 1)  {
+    if((fd1=open("/tmp/tsmat.pipein", O_RDWR | O_NONBLOCK)) == - 1)  {
         // printf("/tmp/tsmat.pipein\n");
         return 2;
     }
@@ -116,12 +116,12 @@ int main()
         return 2;
     }
 
-    //printf("Pipe size S: %d\n", fcntl(fd2, F_GETPIPE_SZ));
-    //fcntl(fd2, F_SETPIPE_SZ, 4096);
-    //printf("Pipe size E: %d\n", fcntl(fd2, F_GETPIPE_SZ));
+    printf("Pipe size S: %d\n", fcntl(fd2, F_GETPIPE_SZ));
+    fcntl(fd2, F_SETPIPE_SZ, 4096);
+    printf("Pipe size E: %d\n", fcntl(fd2, F_GETPIPE_SZ));
 
 
-    // printf("nwy at test start\n");
+    printf("nwy at test start\n");
 
     ret = nwy_at_port_init(NULL);
     if (ret != 0)
@@ -133,7 +133,7 @@ int main()
     ret = nwy_at_reg_urc_cb_func(at_cmd_urc_table, nwy_at_urc_table_size);
     if(ret == NWY_RES_OK)
     {
-        // printf("register success!\n");
+        printf("register success!\n");
     }
 
 
@@ -144,14 +144,14 @@ int main()
         if(rlen == -1) printf("Ошибка чтения из fifo\n");
         else{
             bufout[rlen-1] = '\0';
-            // printf("Получено из канала fifo:%s\n",bufout);
-            // printf("Длина:%d\n",rlen);
+            printf("Получено из канала fifo:%s\n",bufout);
+            printf("Длина:%d\n",rlen);
             sprintf(send_cmd, "%s%s", bufout, "\r\n");
             ret = nwy_at_send_cmd(send_cmd, resp, NWY_AT_WAIT_DEFAULT);
 
             if (ret != 0)
             {
-                printf("Send at cmd failed\r\n");
+                printf("Send at cmd failed: %d\r\n", ret);
                 return 1;
             } else {
                 // printf("Send OK\r\n");
@@ -159,10 +159,10 @@ int main()
             }
             if(resp != NULL)
             {
-                // printf("\n**********************************\n");
-                // printf("%s", resp);
-                // printf("%d", strlen(resp));
-                // printf("\n**********************************\n");
+                printf("\n**********************************\n");
+                printf("%s", resp);
+                printf("%d", strlen(resp));
+                printf("\n**********************************\n");
 
                 write(fd2,resp,strlen(resp)) ;
 
